@@ -15,7 +15,7 @@ As an alternative, this set of scripts can be modified to watch any directory th
 Setup a Raspberry Pi with Raspbian Jessie <br />
 https://www.raspberrypi.org/downloads/raspbian/ <br />
 
-Clone this repo and install:
+Clone this repo and install:<br />
 git clone https://github.com/af001/pi-detector.git<br />
 cd pi-detector/scripts<br />
 sudo chmod +x install.sh<br />
