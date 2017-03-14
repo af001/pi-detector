@@ -2,9 +2,9 @@
 Raspberry Pi Facial Recognition using AWS Rekognition and Pi-Timolo
 
 ### Description
-Pi-detector is used with [Pi-Timolo](https://github.com/pageauc/) to search motion generated images for face matches by leveraging AWS Rekognition. In its current state, matches are wrote to event.log. With some additional creativity and work, you could send out a notification or allow/deny access to a room with minimal changes. The install script will place the appropriate files in /etc/rc.loal to start on boot.  
+Pi-detector is used with [Pi-Timolo](https://github.com/pageauc/) to search motion generated images for face matches by leveraging AWS Rekognition. In its current state, matches are wrote to event.log. With some additional creativity and work, you could send out a notification or allow/deny access to a room with minimal changes. The install script will place the appropriate files in /etc/rc.local to start on boot.  
 
-### Build Requirments
+### Build Requirements
 Raspberry Pi (Tested with Rpi 3) <br />
 Picamera <br />
 AWS Rekognition Access (Free tier options available) <br />
@@ -23,7 +23,7 @@ sudo ./install<br />
 
 ### Getting started
 
-First, you need to create a new collection on aws rekognition. Creating a 'home' collection would look like:
+First, you need to create a new collection on AWS Rekognition. Creating a 'home' collection would look like:
 
 cd pi-detector/scripts<br />
 python add_collection.py -n 'home'<br />
@@ -38,7 +38,7 @@ I found the best results by taking a photo in the same area that the camera will
 cd pi-detector/scripts<br />
 python take_selfie.py<br />
 
-Once complete, you can go back and rename the file and repete the steps above to add your images to aws rekognition. Once you create a new collection, or add a new image, two reference files will be created as a future reference. Thise are useful if you plan on deleting images or collections in the future.
+Once complete, you can go back and rename the file and repeat the steps above to add your images to AWS Rekognition. Once you create a new collection, or add a new image, two reference files will be created as a future reference. These are useful if you plan on deleting images or collections in the future.
 
 To delete a face from your collection, use the following:
 
@@ -52,11 +52,11 @@ To remove a collection:
 cd pi-detector/scripts<br />
 python del_collections.py -c 'home'<br />
 
-Note that the above will also delete all the faces you have stored in aws. 
+Note that the above will also delete all the faces you have stored in AWS. 
 
-The last script is facematch.py. If you have images updated and just want to test static photos against the faces you have stored on aws, do the following:
+The last script is facematch.py. If you have images updated and just want to test static photos against the faces you have stored on AWS, do the following:
 
 cd pi-detector/scripts<br />
 python facematch.py -i 'tom.jpg' -c 'home'<br />
 
-The results will be printed to screen, to include the percentage of similiarity and confidence. 
+The results will be printed to screen, to include the percentage of similarity and confidence. 
