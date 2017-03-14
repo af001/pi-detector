@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Initial install script for pi-detector
+# By Anton
+# 03/14/17
+
 echo '[+] Updating and installing dependencies...'
 apt-get update && apt-get -y upgrade
 
