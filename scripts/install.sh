@@ -12,7 +12,11 @@ apt-get purge wolfram-engine
 
 apt-get install build-essential setuptools awsclii 
 
+<<<<<<< Updated upstream
 pip install boto3 watchdog
+=======
+pip install boto3 watchdog 
+>>>>>>> Stashed changes
 rm -rf ~/.cache/pip
 
 echo '[+] Configuring AWS...'

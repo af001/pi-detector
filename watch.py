@@ -7,9 +7,6 @@ import boto3 as b3
 from watchdog.observers import Observer  
 from watchdog.events import FileSystemEventHandler, LoggingEventHandler
 
-sys.path.insert(0, '/home/pi/pi-detector/scripts')
-from servo import *
-
 client = b3.client('rekognition')
 
 class FileEventHandler(FileSystemEventHandler):
@@ -30,7 +27,6 @@ class FileEventHandler(FileSystemEventHandler):
                 if (not resp['FaceMatches']):
                     check.write('%s | Unknown Person | %s\n' % (time.strftime('%Y-%m-%d %H:%M:%S'), event.src_path))
                 else:
-	 	    servo.open(wiringpi, delay_period)
                     check.write('%s | %s | %s\n' % (time.strftime('%Y-%m-%d %H:%M:%S'), resp['FaceMatches'][0]['Face']['ExternalImageId'], event.src_path))
     	    file.flush()
 	    file.close()
