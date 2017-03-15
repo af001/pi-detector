@@ -16,7 +16,6 @@ class FileEventHandler(FileSystemEventHandler):
         image = file.read()
 
         response_check = client.detect_faces(Image={'Bytes': image})
-        print response_check
         if (not response_check['FaceDetails']):
 	    file.flush()
 	    file.close()
