@@ -3,7 +3,7 @@
 import boto3 as b3
 from argparse import ArgumentParser
 from time import gmtime, strftime
-
+ 
 def get_client():
     return b3.client('rekognition')
 
