@@ -25,7 +25,7 @@ curl -L https://raw.github.com/pageauc/pi-timolo/master/source/pi-timolo-install
 mv $HOME/pi-timolo /home/pi/pi-timolo
 chown -R pi:pi /home/pi/pi-timolo
 
-echo '[+] Adding auto launch for pi-timolo to start on boot
+echo '[+] Adding auto launch for pi-timolo to start on boot'
 sed -i "\$i su pi -c \"/home/pi/pi-timolo/pi-timolo.sh start > /dev/null &\"" /etc/rc.local
 sed -i "\$i su pi -c \"/home/pi/pi-timolo/webserver.sh start > /dev/null &\"" /etc/rc.local
 sed -i "\$i su pi -c \"/home/pi/pi-detector/watch.sh start > /dev/null &\"" /etc/rc.local
