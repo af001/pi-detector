@@ -23,6 +23,6 @@ if __name__ == '__main__':
     if (response['ResponseMetadata']['HTTPStatusCode'] == 200):
         current = strftime("%Y-%m-%d %H:%M:%S", gmtime())
         with open('collections.txt', 'a+') as file:
-            file.write('%s | %s') % (current, args.name)
+            file.write(('%s | %s') % (current, args.name))
 
         print '[+] Done!'
