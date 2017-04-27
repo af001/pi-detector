@@ -10,7 +10,7 @@ apt-get update && apt-get -y upgrade
 echo '[+] Freeing up space. Removing Wolfram-Engine...'
 apt-get purge wolfram-engine
 
-apt-get install -y build-essential python-setuptools awscli
+apt-get install -y build-essential python-setuptools python-pip awscli
 
 pip install boto3 watchdog simplejson
 rm -rf ~/.cache/pip
