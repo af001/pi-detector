@@ -2,9 +2,14 @@
 
 from picamera import PiCamera
 import time
+import os
 
 count = 10
 camera = PiCamera()
+directory = '/home/pi/pi-detector/faces'
+
+if not os.path.exists(directory):
+    os.makedirs(directory)
 
 print '[+] A photo will be taken in 10 seconds...'
 
@@ -13,6 +18,6 @@ for i in range(count):
     time.sleep(1)
 
 milli = int(round(time.time() * 1000))
-image = '/home/pi/pi-detector/faces/image_%r.jpg' % milli
+image = '{0}/image_{1}.jpg'.format(directory, milli)
 camera.capture(image)
 print 'Your image was saved to %s' % image
