@@ -6,6 +6,8 @@ import os
 
 count = 10
 camera = PiCamera()
+camera.vflip = True
+camera.hflip = True
 directory = '/home/pi/pi-detector/faces'
 
 if not os.path.exists(directory):
