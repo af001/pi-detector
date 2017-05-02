@@ -4,6 +4,7 @@ import sys
 import os
 import time
 import boto3 as b3
+from botocore.exceptions import ClientError
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 
