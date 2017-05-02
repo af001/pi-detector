@@ -18,13 +18,13 @@ class MotionEventHandler(PatternMatchingEventHandler):
     patterns = ["*.jpg"]
 
     def on_created(self, event):
-        print(event.src_path, event.event_type)
+        #print(event.src_path, event.event_type)
         event_file = open(event.src_path, 'rb')
         image = event_file.read()
 
         response_check = client.detect_faces(Image={'Bytes': image})
         if not response_check['FaceDetails']:
-            print 'No face detected, deleting file...'
+            #print 'No face detected, deleting file...'
             event_file.flush()
             event_file.close()
             try:
@@ -32,7 +32,7 @@ class MotionEventHandler(PatternMatchingEventHandler):
             except OSError:
                 print 'Cannot delete file, check permissions'
         else:
-            print 'Face detected, identifying...'
+            #print 'Face detected, identifying...'
             try:
                 resp = client.search_faces_by_image(
                     CollectionId=self.collection,
