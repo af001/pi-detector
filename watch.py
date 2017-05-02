@@ -6,15 +6,18 @@ import time
 import boto3 as b3
 from watchdog.observers import Observer  
 from watchdog.events import FileSystemEventHandler, LoggingEventHandler
+from watchdog.events import PatternMatchingEventHandler 
 
 client = b3.client('rekognition')
 
-class FileEventHandler(FileSystemEventHandler):
-    
+class MotionEventHandler(PatternMatchingEventHandler):
+    patterns = ["*.jpg"]
+
     def on_created(self, event):
+        print event.src_path, event.event_type
 	file = open(event.src_path, 'rb')
         image = file.read()
-
+        
         response_check = client.detect_faces(Image={'Bytes': image})
         if (not response_check['FaceDetails']):
 	    file.flush()
@@ -33,8 +36,9 @@ class FileEventHandler(FileSystemEventHandler):
 def main():
     path = sys.argv[1] if len(sys.argv) > 1 else '.'
     observer = Observer()
-    event_handler = FileEventHandler()
+    event_handler = MotionEventHandler()
     observer.schedule(event_handler, path)
+    print 'Starting observer on %s' % path
     observer.start()
 
     try:
