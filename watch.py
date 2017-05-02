@@ -8,6 +8,7 @@ from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 
 client = b3.client('rekognition')
+collection = None
 
 class MotionEventHandler(PatternMatchingEventHandler):
     patterns = ["*.jpg"]
@@ -30,7 +31,7 @@ class MotionEventHandler(PatternMatchingEventHandler):
         else:
             print('Face detected, identifying...')
             resp = client.search_faces_by_image(
-                CollectionId='home',
+                CollectionId=collection,
                 Image={'Bytes': image},
                 MaxFaces=1,
                 FaceMatchThreshold=85)
@@ -48,6 +49,7 @@ class MotionEventHandler(PatternMatchingEventHandler):
 
 def main():
     path = sys.argv[1] if len(sys.argv) > 1 else '.'
+    collection = sys.argv[2] if len(sys.argv) > 2 else 'camerapi'
     observer = Observer()
     event_handler = MotionEventHandler()
     observer.schedule(event_handler, path)
