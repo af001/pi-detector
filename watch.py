@@ -4,9 +4,8 @@ import sys
 import os
 import time
 import boto3 as b3
-from watchdog.observers import Observer  
-from watchdog.events import FileSystemEventHandler, LoggingEventHandler
-from watchdog.events import PatternMatchingEventHandler 
+from watchdog.observers import Observer
+from watchdog.events import PatternMatchingEventHandler
 
 client = b3.client('rekognition')
 
@@ -14,31 +13,39 @@ class MotionEventHandler(PatternMatchingEventHandler):
     patterns = ["*.jpg"]
 
     def on_created(self, event):
-        print event.src_path, event.event_type
-	file = open(event.src_path, 'rb')
+        print(event.src_path, event.event_type)
+        file = open(event.src_path, 'rb')
         image = file.read()
-        
+
         response_check = client.detect_faces(Image={'Bytes': image})
-        if (not response_check['FaceDetails']):
-	    file.flush()
-	    file.close()
+        if not response_check['FaceDetails']:
+            file.flush()
+            file.close()
             os.remove(event.src_path)
-        else: 
-            resp = client.search_faces_by_image(CollectionId='home', Image={'Bytes': image}, MaxFaces=1, FaceMatchThreshold=85)
-	    with open('event.log', 'a+') as check:
-                if (not resp['FaceMatches']):
-                    check.write('%s | Unknown Person | %s\n' % (time.strftime('%Y-%m-%d %H:%M:%S'), event.src_path))
+        else:
+            resp = client.search_faces_by_image(
+                CollectionId='home',
+                Image={'Bytes': image},
+                MaxFaces=1,
+                FaceMatchThreshold=85)
+            with open('event.log', 'a+') as check:
+                if not resp['FaceMatches']:
+                    check.write('%s | Unknown Person | %s\n' %
+                                (time.strftime('%Y-%m-%d %H:%M:%S'), event.src_path))
                 else:
-                    check.write('%s | %s | %s\n' % (time.strftime('%Y-%m-%d %H:%M:%S'), resp['FaceMatches'][0]['Face']['ExternalImageId'], event.src_path))
-    	    file.flush()
-	    file.close()
+                    check.write('%s | %s | %s\n' % (
+                        time.strftime('%Y-%m-%d %H:%M:%S'),
+                        resp['FaceMatches'][0]['Face']['ExternalImageId'],
+                        event.src_path))
+            file.flush()
+            file.close()
 
 def main():
     path = sys.argv[1] if len(sys.argv) > 1 else '.'
     observer = Observer()
     event_handler = MotionEventHandler()
     observer.schedule(event_handler, path)
-    print 'Starting observer on %s' % path
+    print('Starting observer on %s' % path)
     observer.start()
 
     try:
@@ -48,6 +55,6 @@ def main():
         observer.stop()
 
     observer.join()
-    
+
 if __name__ == '__main__':
     main()
