@@ -30,20 +30,23 @@ class MotionEventHandler(PatternMatchingEventHandler):
                 print('Cannot delete file, check permissions')
         else:
             print('Face detected, identifying...')
-            resp = client.search_faces_by_image(
-                CollectionId=collection,
-                Image={'Bytes': image},
-                MaxFaces=1,
-                FaceMatchThreshold=85)
-            with open('event.log', 'a+') as check:
-                if not resp['FaceMatches']:
-                    check.write('%s | Unknown Person | %s\n' %
-                                (time.strftime('%Y-%m-%d %H:%M:%S'), event.src_path))
-                else:
-                    check.write('%s | %s | %s\n' % (
-                        time.strftime('%Y-%m-%d %H:%M:%S'),
-                        resp['FaceMatches'][0]['Face']['ExternalImageId'],
-                        event.src_path))
+            try:
+                resp = client.search_faces_by_image(
+                    CollectionId=collection,
+                    Image={'Bytes': image},
+                    MaxFaces=1,
+                    FaceMatchThreshold=85)
+                with open('event.log', 'a+') as check:
+                    if not resp['FaceMatches']:
+                        check.write('%s | Unknown Person | %s\n' %
+                                    (time.strftime('%Y-%m-%d %H:%M:%S'), event.src_path))
+                    else:
+                        check.write('%s | %s | %s\n' % (
+                            time.strftime('%Y-%m-%d %H:%M:%S'),
+                            resp['FaceMatches'][0]['Face']['ExternalImageId'],
+                            event.src_path))
+            except ResourceNotFoundException:
+                print('Error: collection %s does not exist' % collection)
             file.flush()
             file.close()
 
