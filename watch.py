@@ -44,8 +44,8 @@ class MotionEventHandler(PatternMatchingEventHandler):
                             time.strftime('%Y-%m-%d %H:%M:%S'),
                             resp['FaceMatches'][0]['Face']['ExternalImageId'],
                             event.src_path))
-            except ResourceNotFoundException:
-                print('Error: collection %s does not exist' % collection)
+            except ClientError as e:
+                print('Client error: %s' % e.response['Error']['Code'])
             file.flush()
             file.close()
 
