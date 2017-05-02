@@ -24,7 +24,6 @@ class MotionEventHandler(PatternMatchingEventHandler):
             file.flush()
             file.close()
             try:
-                os.chmod(event.src_path, 0664)
                 os.remove(event.src_path)
             except OSError:
                 print('Cannot delete file, check permissions')
