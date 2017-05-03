@@ -30,26 +30,28 @@ class MotionEventHandler(PatternMatchingEventHandler):
             try:
                 os.remove(event.src_path)
             except OSError:
-                print 'Cannot delete file, check permissions'
+                print('Cannot delete file, check permissions')
         else:
             #print 'Face detected, identifying...'
             try:
                 resp = client.search_faces_by_image(
                     CollectionId=self.collection,
                     Image={'Bytes': image},
-                    MaxFaces=1,
+                    MaxFaces=10,
                     FaceMatchThreshold=85)
                 with open('event.log', 'a+') as check:
+                    persons = None
                     if not resp['FaceMatches']:
-                        check.write('%s | Unknown Person | %s\n' %
-                                    (time.strftime('%Y-%m-%d %H:%M:%S'), event.src_path))
+                        persons = 'Unknown'
                     else:
-                        check.write('%s | %s | %s\n' % (
-                            time.strftime('%Y-%m-%d %H:%M:%S'),
-                            resp['FaceMatches'][0]['Face']['ExternalImageId'],
-                            event.src_path))
+                        persons = ', '.join(map(
+                            lambda name: name['Face']['ExternalImageId'], resp['FaceMatches']))
+                    check.write('%s | %s | %s\n' % (
+                        time.strftime('%Y-%m-%d %H:%M:%S'),
+                        persons,
+                        event.src_path))
             except ClientError as exception:
-                print 'Error: %s' % exception.response['Error']['Code']
+                print('Error: %s' % exception.response['Error']['Code'])
             event_file.flush()
             event_file.close()
 
@@ -59,7 +61,7 @@ def main():
     observer = Observer()
     event_handler = MotionEventHandler(collection)
     observer.schedule(event_handler, path)
-    print 'Starting observer on %s' % path
+    print('Starting observer on %s' % path)
     observer.start()
 
     try:
