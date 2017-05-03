@@ -37,18 +37,14 @@ class MotionEventHandler(PatternMatchingEventHandler):
                 resp = client.search_faces_by_image(
                     CollectionId=self.collection,
                     Image={'Bytes': image},
-                    MaxFaces=10,
+                    MaxFaces=1,
                     FaceMatchThreshold=85)
                 with open('event.log', 'a+') as check:
-                    persons = None
-                    if not resp['FaceMatches']:
-                        persons = 'Unknown'
-                    else:
-                        persons = ', '.join(map(
-                            lambda name: name['Face']['ExternalImageId'], resp['FaceMatches']))
+                    person = ('Unknown' if not resp['FaceMatches']
+                              else resp['FaceMatches'][0]['Face']['ExternalImageId'])
                     check.write('%s | %s | %s\n' % (
                         time.strftime('%Y-%m-%d %H:%M:%S'),
-                        persons,
+                        person,
                         event.src_path))
             except ClientError as exception:
                 print('Error: %s' % exception.response['Error']['Code'])
